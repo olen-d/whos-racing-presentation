@@ -115,6 +115,7 @@
     <div class="input-username mb-2">
       <v-text-field
         v-model="inputValue"
+        autocapitalize="none"
         clearable
         type="text"
         :error-messages="errorMessages"
