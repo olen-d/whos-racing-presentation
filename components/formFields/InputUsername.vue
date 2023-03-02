@@ -5,7 +5,7 @@
   const props = defineProps({
     errorMessage: {
       type: String,
-      default: 'Please enter a valid username'
+      default: 'Please enter a valid username. A username can contain any combination of lowercase letters and numbers. Special charcters . - and _ can be used as separators'
     },
     initialValue: {
       type: String,
@@ -78,7 +78,7 @@
   }, 500)
 
   const validate = value => {
-    const alphaNumeric = /^[a-zA-Z0-9]+(?:[\-_.+]?[a-zA-Z0-9]+)*$/
+    const alphaNumeric = /^[a-z0-9]+(?:[\-_.+]?[a-z0-9]+)*$/
     const isValid = value && alphaNumeric.test(value)
     return isValid
   }
