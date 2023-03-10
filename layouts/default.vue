@@ -2,12 +2,14 @@
   import { ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
 
+  const config = useRuntimeConfig()
+
   const authStore = useAuthStore()
   const route = useRoute()
 
+  authStore.apiBaseUrl = config.apiBaseUrl
+
   const { isAuthorized, role } = storeToRefs(authStore)
-  // const isAuthorized = ref(authStore.isAuthorized)
-  // const role = ref(authStore.role)
 
   const drawer = ref(false)
 
@@ -24,8 +26,8 @@
   ]
 
   const linksSignedOut = [
-  { title: 'Sign In', icon: 'mdi-account', to: '/login' },
-  { title: 'Sign Up', icon: 'mdi-account-plus', to: '/signup'}
+    { title: 'Sign In', icon: 'mdi-account', to: '/login' },
+    { title: 'Sign Up', icon: 'mdi-account-plus', to: '/signup'}
   ]
 
   const handleLogout = () => {
@@ -34,7 +36,6 @@
 
   const logout = async () => {
     authStore.$reset()
-    localStorage.removeItem('user_token')
 
     drawer.value = false
 
