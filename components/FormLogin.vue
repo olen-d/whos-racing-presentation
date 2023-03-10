@@ -93,7 +93,7 @@
                 const expiration = new Date()
                 expiration.setDate(expiration.getDate() + 30)
 
-                const refreshTokenCookie = useCookie('refreshToken', { domain: 'localhost:3500', expires: expiration, path: '/' }) // , path: '/api/v1/auth/token/grant-type/refresh-token' , httpOnly: true, secure: true
+                const refreshTokenCookie = useCookie('refreshToken', { domain: config.cookieDomain, expires: expiration, path: '/' }) // , path: '/api/v1/auth/token/grant-type/refresh-token' , httpOnly: true, secure: true
                 refreshTokenCookie.value = refreshToken
   
                 await navigateTo({ path: '/' })
