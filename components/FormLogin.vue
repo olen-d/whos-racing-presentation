@@ -90,12 +90,6 @@
 
               const isValidAccessToken = await verifyBearerToken(accessToken, publicKey)
               if (isValidAccessToken) {
-                const expiration = new Date()
-                expiration.setDate(expiration.getDate() + 30)
-
-                const refreshTokenCookie = useCookie('refreshToken', { domain: config.cookieDomain, expires: expiration, httpOnly: true, path: '/' }) // , path: '/api/v1/auth/token/grant-type/refresh-token'  secure: true
-                refreshTokenCookie.value = refreshToken
-  
                 await navigateTo({ path: '/' })
               } // An unverified token will throw and error that will get caught in the catch block
             }
