@@ -8,9 +8,6 @@
 
   const config = useRuntimeConfig()
 
-  const { error: e, isLoading: il, fetchResult: fr } = await useFetchPost(null, config, { refreshToken: 'none' }, 'fetch grant type refresh token failed', 'api/v1/auth/token/grant-type/refresh-token')
-  console.log(JSON.stringify(fr.value, null, 5))
-
   const alertType = ref('')
   const alertDescription = ref('')
   const dialogMessage = ref('')
