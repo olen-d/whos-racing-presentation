@@ -37,7 +37,7 @@
   const logout = async () => {
     authStore.$reset()
     
-    const endpoint = 'api/v1/token/refresh/clear-cookie'
+    const endpoint = 'api/v1/auth/token/refresh/clear-cookie'
     const errorMessage = 'unable to clear refresh token cookie'
 
     const { error, isLoading, fetchResult, refresh } = await useFetchGet(null, config, errorMessage, endpoint)
