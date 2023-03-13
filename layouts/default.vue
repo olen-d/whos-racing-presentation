@@ -35,13 +35,18 @@
   }
 
   const logout = async () => {
-    authStore.$reset()
-    
+    const data = { refreshToken: authStore.currentRefreshToken }
+    const errorMsg = 'Refresh token was not deleted. '
+    const endpointDelete = 'api/v1/auth/token/refresh'
+
+    const { error: errorDelete, isLoading: isLoadingDelete, fetchResult: fetchResultDelete } = await useFetchDelete(null, config, data, errorMsg, endpointDelete)
+
     const endpoint = 'api/v1/auth/token/refresh/clear-cookie'
     const errorMessage = 'unable to clear refresh token cookie'
 
     const { error, isLoading, fetchResult, refresh } = await useFetchGet(null, config, errorMessage, endpoint)
-
+  
+    authStore.$reset()
     drawer.value = false
 
     const { path } = route
