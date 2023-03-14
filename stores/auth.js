@@ -31,7 +31,7 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    checkBearerExpiration() {
+    async checkBearerExpiration() {
       if (this.currentJWT) {
         const { exp } = decodeBearerToken(this.currentJWT)
         const now = new Date()
@@ -42,10 +42,10 @@ export const useAuthStore = defineStore('auth', {
         const timeUntilExp = expTimestamp - timestamp
 
         if (timeUntilExp <= 300000) {
-          this.fetchNewTokens()
+          await this.fetchNewTokens()
         }
       } else {
-        this.fetchNewTokens()
+        await this.fetchNewTokens()
       }
     },
     async fetchBearerTokenPublicKey() {
