@@ -22,4 +22,17 @@ const verifyBearerToken = async (accessToken, publicKey) => {
   }
 }
 
-export { decodeBearerToken, verifyBearerToken }
+const verifyRefreshToken = async (refreshToken, publicKey) => {
+  const rtAlgorithm = import.meta.env.VITE_RT_ALGORITHM
+  const rtIssuer = import.meta.env.VITE_RT_ISSUER
+
+  try {
+    const ecPublicKey = await jose.importSPKI(publicKey, rtAlgorithm)
+    const result = await jose.jwtVerify(refreshToken, ecPublicKey, { issuer: rtIssuer })
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export { decodeBearerToken, verifyBearerToken, verifyRefreshToken }

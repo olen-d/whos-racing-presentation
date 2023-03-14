@@ -7,7 +7,7 @@ export const useAuthStore = defineStore('auth', {
       doLogout: false,
       now: new Date(),
       bearerTokenPublicKey: '',
-      refreshTokenPublicKey: ''
+      refreshTokenPublicKey: '',
     }
   },
 
@@ -33,7 +33,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     checkBearerExpiration() {
       if (this.currentJWT) {
-        const { exp } = decodeBearerToken(state.currentJWT)
+        const { exp } = decodeBearerToken(this.currentJWT)
         const now = new Date()
 
         const expTimestamp = exp * 1000
@@ -42,26 +42,63 @@ export const useAuthStore = defineStore('auth', {
         const timeUntilExp = expTimestamp - timestamp
 
         if (timeUntilExp <= 300000) {
-          // Refresh token
+          this.fetchNewTokens()
         }
+      } else {
+        this.fetchNewTokens()
+      }
+    },
+    async fetchBearerTokenPublicKey() {
+      try {
+        const endpoint = 'api/v1/auth/token/bearer/public-key'
+        const errorMessage = 'fetch bearer token public key failed'
+  
+        const config = { apiBaseUrl : this.apiBaseUrl }
+        const { error, isLoading, fetchResult } = await useFetchGet(null, config, errorMessage, endpoint)
+        if (error) {
+          return false
+        } else {
+          const { value: { data: { publicKey }, }, } = fetchResult
+          this.bearerTokenPublicKey = publicKey
+        }
+      } catch (error) {
+        throw new Error(`Auth Store Actions Fetch Bearer Token Public Key ${error}`)
       }
     },
     async fetchRefreshTokenPublicKey() {
-      const endpoint = 'api/v1/auth/token/refresh/public-key'
-      const errorMessage = 'fetch refresh token public key failed'
-
-      const config = { apiBaseUrl : this.apiBaseUrl }
-      const { error, isLoading, fetchResult } = await useFetchGet(null, config, errorMessage, endpoint)
-
+      try {
+        const endpoint = 'api/v1/auth/token/refresh/public-key'
+        const errorMessage = 'fetch refresh token public key failed'
+  
+        const config = { apiBaseUrl : this.apiBaseUrl }
+        const { error, isLoading, fetchResult } = await useFetchGet(null, config, errorMessage, endpoint)
+        if (error) {
+          return false
+        } else {
+          const { value: { data: { publicKey }, }, } = fetchResult
+          this.refreshTokenPublicKey = publicKey
+        }
+      } catch (error) {
+        throw new Error(`Auth Store Actions Fetch Refresh Token Public Key ${error}`)
+      }
     },
     async fetchNewTokens() {
-      const refreshTokenValue = this.currentRefreshToken ? this.currentRefreshToken : 'none'
-      const config = { apiBaseUrl : this.apiBaseUrl }
-      const { error, isLoading, fetchResult } = await useFetchPost(null, config, { refreshToken: refreshTokenValue }, 'fetch grant type refresh token failed', 'api/v1/auth/token/grant-type/refresh-token')
-      if (error) {
-        return false
-      } else {
-        // Verify the tokens
+      try {
+        this.fetchBearerTokenPublicKey
+        this.fetchRefreshTokenPublicKey
+
+        const refreshTokenValue = this.currentRefreshToken ? this.currentRefreshToken : 'none'
+        const config = { apiBaseUrl : this.apiBaseUrl }
+        const { error, isLoading, fetchResult } = await useFetchPost(null, config, { refreshToken: refreshTokenValue }, 'fetch grant type refresh token failed', 'api/v1/auth/token/grant-type/refresh-token')
+        if (error) {
+          return false
+        } else {
+          const { value: { data: { accessToken, newRefreshToken }, }, } = fetchResult
+          this.currentJWT = verifyBearerToken(accessToken, this.bearerTokenPublicKey) ? accessToken : ''
+          this.currentRefreshToken = verifyRefreshToken(newRefreshToken, this.refreshTokenPublicKey) ? newRefreshToken : ''
+        }
+      } catch (error) {
+        throw new Error(`Auth Store Actions Fetch New Tokens ${error}`)
       }
     },
     start() {
@@ -69,35 +106,3 @@ export const useAuthStore = defineStore('auth', {
     }
   }
 })
-
-// try {
-
-// const refreshTokenValue = state.currentRefreshToken ? state.currentRefreshToken : 'none'
-
-
-// if (error) {
-//   return false
-// } else {
-//   const { data: { accessToken, refreshToken, tokenType } } = fetchResult
-
-//   if (tokenType === 'bearer') {
-//     // TODO: Verify the tokens
-//     state.currentJWT = accessToken
-//     state.currentRefreshToken = refreshToken
-
-//     const expiration = new Date()
-//     expiration.setDate(expiration.getDate() +30)
-
-//     const refreshTokenCookie = useCookie('refreshToken', { expires: expiration, httpOnly: true }) // , secure: true
-//     refreshTokenCookie.value = refreshToken
-
-//     return true
-//   } else {
-//     return false
-//   }
-// }
-// }
-// } catch (error) {
-// throw new Error(`Auth Store Getters Is Authorized ${error}`)
-// }
-// },
