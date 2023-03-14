@@ -2,6 +2,7 @@
   import { storeToRefs } from 'pinia'
 
   const authStore = useAuthStore()
+  authStore.checkBearerExpiration()
 
   const { isAuthorized } = storeToRefs(authStore)
 </script>
