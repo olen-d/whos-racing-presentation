@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
       return state.currentJWT ? JSON.parse(atob(state.currentJWT.split(".")[1])) : null
     },
     isAuthorized (state) {
-      if (state.bearerTokenPublicKey && verifyBearerToken(state.currentJWT, state.bearerTokenPublicKey)) {
+      if (state.bearerTokenPublicKey && state.currentJWT && verifyBearerToken(state.currentJWT, state.bearerTokenPublicKey)) {
         return true
       } else {
         return false
@@ -52,10 +52,10 @@ export const useAuthStore = defineStore('auth', {
       try {
         const endpoint = 'api/v1/auth/token/bearer/public-key'
         const errorMessage = 'fetch bearer token public key failed'
-  
+
         const config = { apiBaseUrl : this.apiBaseUrl }
         const { error, isLoading, fetchResult } = await useFetchGet(null, config, errorMessage, endpoint)
-        if (error) {
+        if (error.value) {
           return false
         } else {
           const { value: { data: { publicKey }, }, } = fetchResult
@@ -69,10 +69,10 @@ export const useAuthStore = defineStore('auth', {
       try {
         const endpoint = 'api/v1/auth/token/refresh/public-key'
         const errorMessage = 'fetch refresh token public key failed'
-  
+
         const config = { apiBaseUrl : this.apiBaseUrl }
         const { error, isLoading, fetchResult } = await useFetchGet(null, config, errorMessage, endpoint)
-        if (error) {
+        if (error.value) {
           return false
         } else {
           const { value: { data: { publicKey }, }, } = fetchResult
@@ -84,13 +84,15 @@ export const useAuthStore = defineStore('auth', {
     },
     async fetchNewTokens() {
       try {
-        this.fetchBearerTokenPublicKey
-        this.fetchRefreshTokenPublicKey
+        this.fetchBearerTokenPublicKey()
+        this.fetchRefreshTokenPublicKey()
 
         const refreshTokenValue = this.currentRefreshToken ? this.currentRefreshToken : 'none'
         const config = { apiBaseUrl : this.apiBaseUrl }
         const { error, isLoading, fetchResult } = await useFetchPost(null, config, { refreshToken: refreshTokenValue }, 'fetch grant type refresh token failed', 'api/v1/auth/token/grant-type/refresh-token')
-        if (error) {
+        if (error.value) {
+          this.currentJWT = ''
+          this.currentRefreshToken = ''
           return false
         } else {
           const { value: { data: { accessToken, newRefreshToken }, }, } = fetchResult
