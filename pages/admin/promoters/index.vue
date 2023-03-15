@@ -21,8 +21,9 @@
   const { currentJWT: accessToken, role, sub } = storeToRefs(authStore)
 
   const endpoint = role.value === 'user' ? `api/v1/promoters/owner/id/${sub.value}` : 'api/v1/promoters'
+  const errorMessage = 'unable to fetch promoters'
 
-  const { error, isLoading, fetchResult, refresh } = await useFetchGet(config, endpoint)
+  const { error, isLoading, fetchResult, refresh } = await useFetchGet(null, config, errorMessage, endpoint)
 
   const handleAddPromoter = () => {
     navigateTo({ path: '/admin/promoters/add' })

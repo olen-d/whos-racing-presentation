@@ -2,12 +2,16 @@
   import { ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
 
+  const config = useRuntimeConfig()
+
   const authStore = useAuthStore()
   const route = useRoute()
 
+  await authStore.checkBearerExpiration()
+
+  authStore.apiBaseUrl = config.apiBaseUrl
+
   const { isAuthorized, role } = storeToRefs(authStore)
-  // const isAuthorized = ref(authStore.isAuthorized)
-  // const role = ref(authStore.role)
 
   const drawer = ref(false)
 
@@ -24,8 +28,8 @@
   ]
 
   const linksSignedOut = [
-  { title: 'Sign In', icon: 'mdi-account', to: '/login' },
-  { title: 'Sign Up', icon: 'mdi-account-plus', to: '/signup'}
+    { title: 'Sign In', icon: 'mdi-account', to: '/login' },
+    { title: 'Sign Up', icon: 'mdi-account-plus', to: '/signup'}
   ]
 
   const handleLogout = () => {
@@ -33,9 +37,18 @@
   }
 
   const logout = async () => {
-    authStore.$reset()
-    localStorage.removeItem('user_token')
+    const data = { refreshToken: authStore.currentRefreshToken }
+    const errorMsg = 'Refresh token was not deleted. '
+    const endpointDelete = 'api/v1/auth/token/refresh'
 
+    const { error: errorDelete, isLoading: isLoadingDelete, fetchResult: fetchResultDelete } = await useFetchDelete(null, config, data, errorMsg, endpointDelete)
+
+    const endpoint = 'api/v1/auth/token/refresh/clear-cookie'
+    const errorMessage = 'unable to clear refresh token cookie'
+
+    const { error, isLoading, fetchResult, refresh } = await useFetchGet(null, config, errorMessage, endpoint)
+  
+    authStore.$reset()
     drawer.value = false
 
     const { path } = route

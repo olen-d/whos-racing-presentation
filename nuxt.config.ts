@@ -2,7 +2,8 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.API_BASE_URL
+      apiBaseUrl: process.env.API_BASE_URL,
+      cookieDomain: process.env.COOKIE_DOMAIN
     }
   },
   css: ['vuetify/lib/styles/main.sass','@mdi/font/css/materialdesignicons.min.css'],

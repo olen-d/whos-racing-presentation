@@ -21,8 +21,9 @@
   const { currentJWT: accessToken, role, sub } = storeToRefs(authStore)
 
   const endpoint = role.value === 'user' ? `api/v1/races/owner/id/${sub.value}` : 'api/v1/races'
+  const errorMessage = 'unable to fetch races'
 
-  const { error, isLoading, fetchResult, refresh } = await useFetchGet(config, endpoint)
+  const { error, isLoading, fetchResult, refresh } = await useFetchGet(null, config, errorMessage, endpoint)
 
   const handleAddRace = () => {
     navigateTo({ path: '/admin/races/add' })

@@ -40,8 +40,9 @@
 
   onMounted(async () => {
     const endpoint = 'api/v1/promoters'
+    const errorMessage = 'unable to fetch promoters'
 
-    const { error, isLoading, fetchResult } = await useFetchGet(config, endpoint)
+    const { error, isLoading, fetchResult } = await useFetchGet(null, config, errorMessage, endpoint)
     if (fetchResult.value.status === 'ok') {
       const promoters = fetchResult.value.data.map(({ _id, promoterName }) => ({ _id, promoterName }))
       promotersList.value = promoters

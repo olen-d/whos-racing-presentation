@@ -73,9 +73,8 @@
 
         const result = response.ok ? await response.json() : null
         if (result && result.status === 'ok') {
-
           // Get the public key to verify the token
-          const responsePublicKey = await fetch(`${config.apiBaseUrl}/api/v1/auth/token/public-key`)
+          const responsePublicKey = await fetch(`${config.apiBaseUrl}/api/v1/auth/token/bearer/public-key`)
           const resultPublicKey = await responsePublicKey.json()
           const { status } = responsePublicKey
 
@@ -83,7 +82,7 @@
             const { data: { publicKey } } = resultPublicKey
             const { data: { accessToken, refreshToken, tokenType } } = result
 
-            authStore.publicKey = publicKey
+            authStore.bearerTokenPublicKey = publicKey
 
             if (tokenType === 'bearer') {
               authStore.currentJWT = accessToken
