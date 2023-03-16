@@ -192,7 +192,7 @@
     <form>
       <v-row>
         <v-col cols="12" sm="6">
-          <FormFieldsInputName
+          <FormFieldsInputAlphaNumeric
             error-message="Please enter a valid race name"
             input-name="raceName"
             labeltext="Race Name"
