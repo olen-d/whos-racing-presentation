@@ -1,6 +1,9 @@
 <script setup>
   import { onMounted, ref, watch } from 'vue'
-  import { debounce } from 'lodash'
+
+  // Lodash is a CommonJS module
+  import pkgLodash from 'lodash'
+  const { debounce } = pkgLodash
 
   const props = defineProps({
     errorMessage: {
