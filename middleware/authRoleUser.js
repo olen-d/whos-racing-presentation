@@ -1,6 +1,6 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const authStore = useAuthStore()
-  authStore.checkBearerExpiration()
+  await authStore.checkBearerExpiration()
 
   const { isAuthorized, role } = authStore
 
