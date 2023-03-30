@@ -93,7 +93,7 @@
 
               const options = {
                 expires: expiration,
-                httpOnly: true,
+                httponly: true,
                 path: '/',
                 secure: true
               }
