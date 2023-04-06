@@ -12,7 +12,7 @@
       const response = await fetch(`${config.apiBaseUrl}/${endpoint}`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${accessToken}`,
           'content-type': 'application/json; charset=utf-8'
         },
         body: JSON.stringify(data)
@@ -29,6 +29,5 @@
       error.value = err.toString()
       isLoading.value = false
     }
-
     return { error, isLoading, fetchResult }
   }

@@ -1,9 +1,13 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const authStore = useAuthStore()
-  
+
   if (process.server) {
-    const refreshTokenSPA = eventHandler((event) => getCookie(event, 'refreshTokenSPA'))
-    authStore.currentRefreshToken = refreshTokenSPA
+    const config = useRuntimeConfig()
+
+    const refreshTokenSPA = useCookie('refreshTokenSPA')
+    authStore.currentRefreshToken = refreshTokenSPA.value
+
+    authStore.apiBaseUrl = config.apiBaseUrl
   }
 
   await authStore.checkBearerExpiration()

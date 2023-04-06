@@ -64,28 +64,30 @@
 <template>
   <NuxtLayout>
     <div class="races">
-      <v-dialog
-        v-model="showDialog"
-        width="auto"
-      >
-        <v-card>
-          <template #title>
-            <h4 class="text-center">{{ dialogTitle }}</h4>
-          </template>
-          <v-card-text>
-            {{ dialogMessage }}
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn color="primary" @click="deleteRace(idToDelete)">
-              Delete
-            </v-btn>
-            <v-btn color="grey-darken-2" @click="showDialog = false">
-              Cancel
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <ClientOnly>
+        <v-dialog
+          v-model="showDialog"
+          width="auto"
+        >
+          <v-card>
+            <template #title>
+              <h4 class="text-center">{{ dialogTitle }}</h4>
+            </template>
+            <v-card-text>
+              {{ dialogMessage }}
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn color="primary" @click="deleteRace(idToDelete)">
+                Delete
+              </v-btn>
+              <v-btn color="grey-darken-2" @click="showDialog = false">
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </ClientOnly>
       <h2 class="pt-3">
         Races
       </h2>
