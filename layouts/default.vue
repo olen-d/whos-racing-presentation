@@ -7,8 +7,6 @@
   const authStore = useAuthStore()
   const route = useRoute()
 
-  await authStore.checkBearerExpiration()
-
   authStore.apiBaseUrl = config.apiBaseUrl
 
   const { isAuthorized, role } = storeToRefs(authStore)

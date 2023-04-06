@@ -84,12 +84,14 @@ export const useAuthStore = defineStore('auth', {
     },
     async fetchNewTokens() {
       try {
-        this.fetchBearerTokenPublicKey()
-        this.fetchRefreshTokenPublicKey()
+        await this.fetchBearerTokenPublicKey()
+        await this.fetchRefreshTokenPublicKey()
 
         const refreshTokenValue = this.currentRefreshToken ? this.currentRefreshToken : 'none'
+
         const config = { apiBaseUrl : this.apiBaseUrl }
         const { error, isLoading, fetchResult } = await useFetchPost(null, config, { refreshToken: refreshTokenValue }, 'fetch grant type refresh token failed', 'api/v1/auth/token/grant-type/refresh-token')
+
         if (error.value) {
           this.currentJWT = ''
           this.currentRefreshToken = ''

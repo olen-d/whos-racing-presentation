@@ -88,6 +88,19 @@
               authStore.currentJWT = accessToken
               authStore.currentRefreshToken = refreshToken
 
+              const expiration = new Date()
+              expiration.setDate(expiration.getDate() + 30)
+
+              const options = {
+                expires: expiration,
+                httponly: true,
+                path: '/',
+                secure: true
+              }
+
+              const refreshTokenSPA = useCookie('refreshTokenSPA', options)
+              refreshTokenSPA.value = refreshToken
+
               const isValidAccessToken = await verifyBearerToken(accessToken, publicKey)
               if (isValidAccessToken) {
                 await navigateTo({ path: '/' })

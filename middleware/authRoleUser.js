@@ -1,6 +1,16 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const authStore = useAuthStore()
-  authStore.checkBearerExpiration()
+
+  if (process.server) {
+    const config = useRuntimeConfig()
+
+    const refreshTokenSPA = useCookie('refreshTokenSPA')
+    authStore.currentRefreshToken = refreshTokenSPA.value
+
+    authStore.apiBaseUrl = config.apiBaseUrl
+  }
+
+  await authStore.checkBearerExpiration()
 
   const { isAuthorized, role } = authStore
 
