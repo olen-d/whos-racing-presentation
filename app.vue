@@ -13,6 +13,11 @@
 
 <template>
   <div>
+    <Head>
+      <Title>
+        Who's Racing?
+      </Title>
+    </Head>
     <NuxtPage />
   </div>
 </template>
