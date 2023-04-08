@@ -64,7 +64,7 @@
 <template>
   <NuxtLayout>
     <div class="races">
-      <ClientOnly>
+      <client-only>
         <v-dialog
           v-model="showDialog"
           width="auto"
@@ -87,7 +87,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </ClientOnly>
+      </client-only>
       <h2 class="pt-3">
         Races
       </h2>
