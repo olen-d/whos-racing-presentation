@@ -44,8 +44,11 @@
     const endpoint = 'api/v1/auth/token/refresh/clear-cookie'
     const errorMessage = 'unable to clear refresh token cookie'
 
+    const refreshTokenSPACookie = useCookie('refreshTokenSPA')
+    refreshTokenSPACookie.value = null
+
     const { error, isLoading, fetchResult, refresh } = await useFetchGet(null, config, errorMessage, endpoint)
-  
+
     authStore.$reset()
     drawer.value = false
 

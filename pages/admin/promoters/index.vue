@@ -64,28 +64,30 @@
 <template>
   <NuxtLayout>
     <div class="promoters">
-      <v-dialog
-        v-model="showDialog"
-        width="auto"
-      >
-        <v-card>
-          <template #title>
-            <h4 class="text-center">{{ dialogTitle }}</h4>
-          </template>
-          <v-card-text>
-            {{ dialogMessage }}
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn color="primary" @click="deletePromoter(idToDelete)">
-              Delete
-            </v-btn>
-            <v-btn color="grey-darken-2" @click="showDialog = false">
-              Cancel
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <client-only>
+        <v-dialog
+          v-model="showDialog"
+          width="auto"
+        >
+          <v-card>
+            <template #title>
+              <h4 class="text-center">{{ dialogTitle }}</h4>
+            </template>
+            <v-card-text>
+              {{ dialogMessage }}
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn color="primary" @click="deletePromoter(idToDelete)">
+                Delete
+              </v-btn>
+              <v-btn color="grey-darken-2" @click="showDialog = false">
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </client-only>
       <h2 class="pt-3">
         Promoters
       </h2>
