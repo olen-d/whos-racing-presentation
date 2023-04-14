@@ -56,7 +56,7 @@
       alertDescription.value = `Great success, the promoter "${promoterName}" was deleted from the database.`
       showAlert.value = true
       setTimeout(() => { showAlert.value = false }, 5000)
-      refresh(config, endpoint)
+      refresh(null, config, errorMessage, endpoint)
     }
   }
 </script>
