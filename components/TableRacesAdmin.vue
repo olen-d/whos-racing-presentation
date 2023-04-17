@@ -44,7 +44,7 @@
           <td class="text-body-2">{{ formatDate(date) }}</td>
           <td class="text-body-2">{{ city }},<br />{{ state }}</td>
           <td class="text-body-2"><span class="d-inline-block text-truncate" style="max-width: 12rem;">{{ raceUrl }}</span></td>
-          <td class="text-body-2">{{ promoterNames[0].promoterName }}</td>
+          <td class="text-body-2">{{ promoterNames[0]?.promoterName || 'No promoter found.' }}</td>
           <td class="text-body-2"><v-icon @click="emits('deleteRace', { _id, raceName })">mdi-trash-can-outline</v-icon></td>
         </tr>
       </tbody>
